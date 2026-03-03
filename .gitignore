@@ -1,0 +1,34 @@
+# ─── Local configs with OSS credentials ───────────────────────────────
+# Copy config-example.yaml to config.yaml and fill in your credentials.
+# The config.yaml files are gitignored so secrets are never committed.
+**/config.yaml
+**/style.yaml  # Legacy naming (deprecated)
+
+# ─── Output HTML files ───────────────────────────────────────────────
+**/output/*.html
+
+# ─── Python artifacts ────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+
+# ─── macOS ───────────────────────────────────────────────────────────
+.DS_Store
+
+# ─── Folders to exclude from GitHub ────────────────────────────────
+/Oracle view/
+/example/
+/skills/superpowers/
+/skills/planning-with-files/
+/skills/skill-creator/
+/skills/skills-discovery/
+
+# ─── Root planning docs to exclude ───────────────────────────────────
+/findings.md
+/progress.md
+/task_plan.md
+/test-article.md
+
+# ─── Nested git repository ───────────────────────────────────────────
+/.git/
