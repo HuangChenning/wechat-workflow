@@ -1,0 +1,116 @@
+# generating-article-images 技能配置文件
+# 请复制此文件为 config.yaml 并填入您的 API 密钥
+
+# ── 默认配置 ─────────────────────────────────────────────────────────────────────
+
+# 默认使用的图片生成 API
+default_api: gemini
+
+# ── API 配置 ───────────────────────────────────────────────────────────────────────
+
+apis:
+  # Google Gemini 3.1 Flash Image Preview (Official SDK)
+  gemini:
+    enabled: true
+    api_key: "YOUR_GEMINI_API_KEY"  # 替换为您的 Gemini API Key
+    model: "gemini-3.1-flash-image-preview"
+    endpoint: "https://generativelanguage.googleapis.com/v1beta/models"
+    timeout: 120  # 请求超时时间（秒）
+    max_retries: 3  # 失败重试次数
+    concurrent_limit: 3  # 并发生成数量限制
+
+  # OpenAI DALL-E 3
+  openai:
+    enabled: false
+    api_key: "YOUR_OPENAI_API_KEY"
+    model: "dall-e-3"
+    endpoint: "https://api.openai.com/v1/images/generations"
+    timeout: 120
+    max_retries: 3
+    concurrent_limit: 3
+
+  # Flux (Black Forest Labs)
+  flux:
+    enabled: false
+    api_key: "YOUR_FLUX_API_KEY"
+    model: "flux-pro"
+    endpoint: "https://api.flux.black-forest-labs.ai/v1"
+    timeout: 120
+    max_retries: 3
+    concurrent_limit: 3
+
+  # Stable Diffusion (本地/云端)
+  stable_diffusion:
+    enabled: false
+    api_key: "YOUR_SD_API_KEY"  # 如果使用云端服务
+    model: "stable-diffusion-xl"
+    endpoint: "http://localhost:7860"  # 本地 SD WebUI 地址
+    timeout: 180  # 本地生成可能需要更长时间
+    max_retries: 1
+    concurrent_limit: 1  # 本地通常不支持并发
+
+# ── 图片生成设置 ───────────────────────────────────────────────────────────────────
+
+image:
+  # 默认图片格式
+  format: "png"
+
+  # 默认图片质量
+  quality: "high"
+
+  # 默认图片尺寸（从提示词中的 Technical 参数解析）
+  default_size: "2K"
+
+  # 默认宽高比（从提示词中的 Technical 参数解析）
+  default_aspect_ratio: "16:9"
+
+  # 并发生成数量限制
+  concurrent_limit: 3
+
+  # 图片保存目录
+  output_dir: "img"
+
+  # 支持的图片格式
+  supported_formats:
+    - png
+    - jpeg
+    - webp
+
+# ── 提示词备份设置 ───────────────────────────────────────────────────────────────────
+
+backup:
+  # 是否启用提示词备份
+  enabled: true
+
+  # 备份文件名
+  filename: "image-prompts.md"
+
+  # 备份格式
+  format: "markdown"
+
+  # 是否在备份中包含生成的图片
+  include_images: true
+
+# ── 重新生成设置 ─────────────────────────────────────────────────────────────────────
+
+regenerate:
+  # 重新生成时是否添加版本号
+  add_version: false
+
+  # 版本号格式（例如：_v2, _v3）
+  version_format: "_v{version}"
+
+  # 是否保留旧版本图片
+  keep_old_versions: false
+
+# ── 日志设置 ───────────────────────────────────────────────────────────────────────
+
+logging:
+  # 日志级别：DEBUG, INFO, WARNING, ERROR
+  level: "INFO"
+
+  # 是否在控制台显示详细进度
+  verbose: true
+
+  # 日志文件路径（可选）
+  file: "image-generation.log"

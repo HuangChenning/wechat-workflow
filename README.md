@@ -1,23 +1,55 @@
 # weixin-skills
 
-微信公众号内容创作技能包。
+微信公众号内容创作技能包 - 从文档到发布的完整工作流。
 
-## 包：wechat-workflow
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.8+-green.svg)](https://www.python.org/downloads/)
 
-本仓库包含 `wechat-workflow` 包 - 一套用于创建专业微信公众号内容的完整技能集合。
+## 📖 项目简介
+
+本项目包含一套完整的微信公众号内容创作工具链，涵盖从**文档收集**、**内容润色**、**图片生成**到**格式转换**的全流程。
+
+### ⭐ 核心特性
+
+- 📚 **智能知识管理**：集成 NotebookLM 进行文档分析和内容规划
+- ✍️ **文章润色**：16 种文学技巧，将技术文档转化为生动文章
+- 🎨 **自动配图**：使用 Gemini 3.1 Flash API 生成高质量文章配图
+- 🔄 **批量转换**：一键将 Markdown 转换为微信公众号 HTML
+- 🎯 **样式定制**：6 种内置样式，支持自定义样式提取
+
+### 🔥 最重要的改进
+
+**`polishing-content` 是工作流中不可或缺的核心步骤！**
+
+它将普通的技术文档转化为：
+- 📖 生动有趣的文学性文章（16 种文学技巧）
+- 🎨 自动生成的图片提示词（Midjourney/DALL-E/Flux）
+- 🏷️ 5 个吸引人的备选标题
+- ✅ 可验证的技术准确性
+
+详见 [WORKFLOW_GUIDE.md](docs/WORKFLOW_GUIDE.md) 了解完整工作流程。
 
 ---
 
-## 📋 可用技能概览
+## 🎯 技能概览
 
-| 技能 | 描述 | 使用场景 |
-|-------|-------------|----------|
-| `polishing-content` | 用16种文学技法和AI图片提示词润色技术文章 | 文章内容枯燥、缺乏吸引力 |
-| `reviewing-technical-accuracy` | 使用 WebSearch 进行全面技术审核 | 发布包含代码/命令的技术内容 |
-| `generating-article-images` | 使用 Gemini 3.1 Flash API 从提示词生成图片 | 自动生成文章配图 |
-| `converting-to-wechat` | 将 Markdown 转换为可配置样式的微信 HTML | 转换 Markdown 文件为微信格式 |
-| `extracting-wechat-styles` | 从 HTML 模板提取样式（如 mdnice） | 创建自定义样式预设 |
-| `using-wechat-workflow` | 包概览和工作流指南 | 开始任何微信内容创作任务 |
+### 核心技能组：wechat-workflow
+
+| 技能 | 功能 | 适用场景 |
+|------|------|----------|
+| `polishing-content` | **文章润色**，添加16种文学技法和图片提示词 | ⭐ **所有文章都必须经过此步骤** |
+| `generating-article-images` | 使用 Gemini 3.1 Flash 生成图片 | 自动生成文章配图（带重试机制） |
+| `converting-to-wechat` | Markdown 转 HTML，支持6种样式 | 转换文章为微信格式 |
+| `reviewing-technical-accuracy` | 技术审核，验证代码和版本兼容性 | 发布包含代码/命令的技术内容 |
+| `extracting-wechat-styles` | 从 HTML 提取样式为 YAML | 创建自定义样式预设 |
+| `using-wechat-workflow` | 完整工作流概览和指南 | 开始任何微信内容创作任务 |
+
+### 扩展技能
+
+| 技能 | 功能 | 适用场景 |
+|------|------|----------|
+| `notebooklm` | NotebookLM 集成，支持文档查询和管理 | 从文档中获取知识、内容分析 |
+| `generating-articles-from-docs` | 从文档自动生成系列文章 | 批量内容生产、知识库转化 |
 
 ---
 
@@ -25,459 +57,212 @@
 
 ### 1. 安装依赖
 
-安装核心转换技能的依赖：
-
 ```bash
+# 安装核心转换技能
 pip3 install -r skills/wechat-workflow/converting-to-wechat/scripts/requirements.txt
-```
 
-### 2. 基础使用
-
-最简单的命令使用 `convert.cfg` 中的默认配置：
-
-```bash
-# 转换单篇文章
-python3 skills/wechat-workflow/converting-to-wechat/scripts/convert.py --input "my-series/article.md"
-
-# 转换整个目录
-python3 skills/wechat-workflow/converting-to-wechat/scripts/convert.py --input "my-series/"
-```
-
-### 3. 自定义样式
-
-临时使用不同的样式预设：
-
-```bash
-python3 skills/wechat-workflow/converting-to-wechat/scripts/convert.py \
-    --input "my-series/article.md" \
-    --style skills/wechat-workflow/converting-to-wechat/styles/wechat-professional-blue.yaml
-```
-
-### 4. 禁用图片上传
-
-本次转换不上传图片：
-
-```bash
-python3 skills/wechat-workflow/converting-to-wechat/scripts/convert.py \
-    --input "my-series/article.md" \
-    --no-upload
-```
-
-> [!TIP]
-> 转换脚本会在文章文件夹中自动创建 `output/` 目录。在浏览器中打开生成的 HTML，**全选（Cmd+A）→ 复制 → 粘贴**到微信公众号编辑器即可。
-
----
-
-## 📖 详细技能指南
-
-### 1. polishing-content（文章润色）
-
-**功能特性：**
-- 应用16种文学技法（金庸式笔触、历史典故、比喻、悬念等）
-- 生成 AI 图片提示词，支持 Midjourney/DALL-E 3/Flux（4K HD 质量）
-- 在保持技术准确性的同时优化语言可读性
-- 创建 5 个备选的高吸引力标题（插入文章开头）
-- 支持单文件和批量处理
-- 可配置的润色强度（轻度/标准/深度）
-
-**支持的技术：**
-- **数据库**：Oracle、MySQL、PostgreSQL、MongoDB、Redis、Elasticsearch
-- **DevOps**：Kubernetes、Docker、Terraform、Ansible、Prometheus
-- **AI/LLM**：大语言模型、RAG、向量数据库
-- **编程语言**：Python、Java、Go、JavaScript/TypeScript、Rust
-
-**使用示例：**
-```
-# 单文件润色
-请润色 /path/to/article.md
-
-# 批量润色
-请润色 /path/to/directory/ 目录下所有的 md 文件
-
-# 带技术验证
-请润色 /path/to/article.md，并验证所有代码片段的技术准确性
-
-# 指定技术领域
-请润色 /path/to/article.md，这是一篇关于 MySQL 的文章
-
-# 添加图片提示词
-请润色 /path/to/article.md，并在适当位置添加图片生成提示词
-```
-
-**输出内容：**
-- 直接修改文章文件
-- 在代码块中生成图片提示词
-- 创建 `img/` 目录存放图片
-- 生成 5 个备选标题（插入文章开头）
-- 批量处理时：生成 `title.md` 封面图片提示词
-
----
-
-### 2. reviewing-technical-accuracy（技术审核）
-
-**功能特性：**
-- 使用 WebSearch 进行全面技术审核
-- 验证产品版本和功能可用性
-- 检查版本兼容性和废弃功能
-- 验证代码语法和命令正确性
-- 确保术语使用准确
-- 生成结构化报告，包含错误、警告和建议
-
-**审核目标：**
-- **概念完整性**（理论正确性）
-- **技术准确性**（命令/代码按描述工作）
-- **术语准确性**（正确使用标准术语）
-- **语言和语义**（拼写、语法、逻辑）
-
-**使用示例：**
-```
-# 审核单个文件
-请审查 /path/to/article.md 的技术准确性
-
-# 批量审核
-请验证 /path/to/directory/ 目录下所有文章的技术准确性
-
-# 指定技术
-请审查 /path/to/article.md，这是一篇 Oracle 相关的技术文章
-```
-
-**输出格式：**
-```
-## 报告：[文件名]
-
-### 🔴 严重错误（事实/技术）
-| 位置 | 错误描述 | 正确事实 | 参考/来源 |
-
-### 🟡 警告（语言/清晰度）
-- 第15行：拼写错误 "Oracel" -> "Oracle"
-
-### 🟢 建议
-- 考虑为此概念添加图表
-```
-
----
-
-### 3. generating-article-images（图片生成）
-
-**功能特性：**
-- 解析文章中的 ````image-prompt` 代码块
-- 调用 Google Gemini 3.1 Flash Image Preview API 生成图片
-- 并发生成多张图片（可配置）
-- 自动替换文章中的提示词为图片链接
-- 保留原始提示词到 `image-prompts.md`
-- 支持按文件名过滤重新生成
-
-**支持的 API：**
-- **Google Gemini 3.1 Flash** (默认)
-- OpenAI DALL-E 3 (可选)
-- Flux (可选)
-- Stable Diffusion (可选)
-
-**使用方法：**
-```bash
-# 安装依赖
+# 安装图片生成技能
 pip3 install -r skills/wechat-workflow/generating-article-images/scripts/requirements.txt
+```
 
-# 配置 API Key
+### 2. 配置 API
+
+```bash
+# 图片生成配置（必需）
 cd skills/wechat-workflow/generating-article-images/scripts
 cp config.example.yaml config.yaml
 # 编辑 config.yaml，填入 Gemini API Key
 
-# 生成所有图片
+# OSS 上传配置（可选，用于图片托管）
+cd ../../converting-to-wechat/
+cp config.example.yaml config.yaml
+# 编辑 config.yaml，填入阿里云 OSS 凭据
+```
+
+### 3. 完整工作流程（推荐）
+
+```bash
+# 步骤 1: 使用 polishing-content 润色文章 ⭐ 核心步骤
+# 在 Claude Code 中执行：
+请润色 /path/to/article.md
+
+# 步骤 2: 生成图片
 python3 skills/wechat-workflow/generating-article-images/scripts/generate_images.py \
     --input "/path/to/article.md"
 
-# 重新生成特定图片
-python3 skills/wechat-workflow/generating-article-images/scripts/generate_images.py \
-    --input "/path/to/article.md" \
-    --filter "01-oracle-architecture.png"
+# 步骤 3: 转换为 HTML
+python3 skills/wechat-workflow/converting-to-wechat/scripts/convert.py \
+    --input "/path/to/articles/" \
+    --output "output/html/"
 ```
 
-**输出内容：**
-- 图片保存到 `img/` 文件夹
-- 文章中的提示词被替换为图片链接
-- `image-prompts.md` 备份所有原始提示词
+### 4. 发布到微信
+
+在浏览器中打开生成的 HTML 文件，全选（Cmd+A）→ 复制 → 粘贴到微信公众号编辑器。
 
 ---
 
-### 4. converting-to-wechat（Markdown转换）
+## 🔄 完整工作流
 
-**功能特性：**
-- 将 Markdown 转换为微信兼容的 HTML
-- 可配置的 YAML 样式（6个内置预设）
-- 阿里云 OSS 自动图片上传
-- macOS 风格代码块渲染
-- 微信编辑器兼容性（使用 `<section>` 替代 `<div>`）
-- 支持单文件和批量目录模式
-- 默认配置系统（convert.cfg）
-
-**命令行参数：**
-| 参数 | 缩写 | 描述 |
-|-----------|-------|-------------|
-| `--input` | `-i` | **（必选）** 输入的 MD 文件或目录路径 |
-| `--style` | `-s` | 视觉样式预设文件路径 |
-| `--config` | `-c` | 本地覆盖配置文件（含 OSS 凭据） |
-| `--upload-images` | | 启用 OSS 图片上传 |
-| `--no-upload` | | 禁用图片上传（覆盖默认设置） |
-| `--output` | `-o` | 输出目录（默认：输入目录/output/） |
-
-**使用示例：**
-```bash
-# 基础转换
-python3 skills/wechat-workflow/converting-to-wechat/scripts/convert.py \
-    --input "Oracle view/第01篇.md"
-
-# 批量转换
-python3 skills/wechat-workflow/converting-to-wechat/scripts/convert.py \
-    --input "my-series/"
-
-# 自定义样式
-python3 skills/wechat-workflow/converting-to-wechat/scripts/convert.py \
-    --input "article.md" \
-    --style skills/wechat-workflow/converting-to-wechat/styles/wechat-professional-blue.yaml
-
-# 使用 v3.0 专业样式（无表情符号、纯色设计）
-python3 skills/wechat-workflow/converting-to-wechat/scripts/convert.py \
-    --input "article.md" \
-    --style skills/wechat-workflow/converting-to-wechat/styles/wechat-v3-professional.yaml
-
-# 不上传图片
-python3 skills/wechat-workflow/converting-to-wechat/scripts/convert.py \
-    --input "article.md" \
-    --no-upload
-```
-
-**内置样式预设：**
-- `mdnice-test.yaml` - 暖橙色，现代排版
-- `wechat-professional-blue.yaml` - 专业微信蓝
-- `wechat-classic.yaml` - 经典深蓝灰
-- `wechat-ios-blue.yaml` - iOS 系统蓝
-- `wechat-minimal-dark.yaml` - 极简深色主题
-- `wechat-v3-professional.yaml` - **v3.0 专业样式**（无表情符号、纯色设计、深绿+暖橙配色）
-
----
-
-### 5. extracting-wechat-styles（样式提取）
-
-**功能特性：**
-- 解析 HTML 文件并提取 CSS 样式
-- 转换为与 converting-to-wechat 兼容的 YAML 格式
-- 支持 mdnice 和其他微信编辑器导出
-- 提取 8 类样式：基础、段落、标题、引用、列表、表格、代码、分隔线
-
-**使用方法：**
-```bash
-# 安装依赖
-pip3 install beautifulsoup4 pyyaml
-
-# 从 HTML 提取样式
-python3 skills/wechat-workflow/extracting-wechat-styles/scripts/generate_style.py \
-    --input "example/test.html" \
-    --name "my-cool-style"
-
-# 自定义输出目录
-python3 skills/wechat-workflow/extracting-wechat-styles/scripts/generate_style.py \
-    --input "exported.html" \
-    --name "custom-style" \
-    --output-dir "/path/to/output"
-```
-
-**输出内容：**
-- YAML 文件保存到 `converting-to-wechat/styles/<name>.yaml`
-- 可立即通过 `--style` 参数使用
-
----
-
-### 6. using-wechat-workflow（包概览）
-
-**功能特性：**
-- 完整的包概览和所有可用技能
-- 不同使用场景的快速入门指南
-- 常见工作流示例
-- 技能依赖关系图
-- 故障排除指南
-- 选择合适技能的指南
-
-**使用方法：**
-```
-# 开始任何微信内容任务时使用此技能
-wechat-workflow:using-wechat-workflow
-```
-
----
-
-## 🔄 常见工作流
-
-### 工作流 1：技术文章发布（推荐）
-
-**适用于技术博客、教程或文档**
+### 标准工作流（推荐）
 
 ```
-[草稿文章]
+┌─────────────────────────────────────────────────────────────────┐
+│  步骤 1️⃣: 创建草稿文章                                          │
+│  - 手动撰写草稿                                                │
+│  - 或从其他工具生成（如 NotebookLM、ChatGPT）                    │
+└────────────────┬────────────────────────────────────────────┘
+                 ↓
+┌─────────────────────────────────────────────────────────────────┐
+│  步骤 2️⃣: 使用 polishing-content 润色 ⭐⭐⭐ 核心步骤        │
+│                                                                  │
+│  🌟 文学技巧润色（16种）                                      │
+│     • 金庸式笔触：武侠风格，生动描述                            │
+│     • 借古喻今：历史典故类比现代技术                            │
+│     • 列锦手法：意象罗列，增强画面感                            │
+│     • 物化手法：抽象概念具体化                                  │
+│     • 比喻类比：用熟悉事物解释抽象                              │
+│     • ...还有11种技巧                                          │
+│                                                                  │
+│  🎨 自动生成图片提示词                                          │
+│     • 根据文章内容自动选择插入位置                              │
+│     • 生成 Midjourney/DALL-E/Flux 提示词                          │
+│     • 包含详细参数：Subject, Details, Style, Colors              │
+│     • 中英文双语说明                                            │
+│                                                                  │
+│  🏷️ 生成5个备选标题                                            │
+│                                                                  │
+│  使用方式：请润色 /path/to/article.md                          │
+└────────────────┬────────────────────────────────────────────┘
+                 ↓
+┌─────────────────────────────────────────────────────────────────┐
+│  步骤 3️⃣: 生成图片                                              │
+│                                                                  │
+│  • 自动解析图片提示词代码块                                     │
+│  • 调用 Gemini 3.1 Flash Image Preview API                      │
+│  • 重试机制：失败自动重试3次（可配置）                         │
+│  • 部分成功也会替换成功的图片                                  │
+│  • 并发生成，提高效率                                          │
+│                                                                  │
+│  python3 generate_images.py --input article.md                 │
+└────────────────┬────────────────────────────────────────────┘
+                 ↓
+┌─────────────────────────────────────────────────────────────────┐
+│  步骤 4️⃣: 转换为微信 HTML                                        │
+│                                                                  │
+│  • 批量转换 Markdown 文件                                       │
+│  • 上传图片到阿里云 OSS                                         │
+│  • 应用样式预设（6种内置样式）                                │
+│  • 微信编辑器兼容优化                                          │
+│                                                                  │
+│  python3 convert.py --input articles/ --output html/           │
+└────────────────┬────────────────────────────────────────────┘
+                 ↓
+┌─────────────────────────────────────────────────────────────────┐
+│  步骤 5️⃣: 发布到微信                                            │
+│                                                                  │
+│  • 在浏览器中打开 HTML 文件                                    │
+│  • 全选 (Cmd+A) → 复制                                         │
+│  • 粘贴到微信公众号编辑器                                     │
+│                                                                  │
+│  完成！🎉                                                       │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 从文档生成文章工作流
+
+```
+[上传文档到 NotebookLM]
        ↓
-[polishing-content]     # 用文学技法增强内容 + 生成图片提示词
+[generating-articles-from-docs] # 自动分析、规划、生成文章
        ↓
-[reviewing-technical-accuracy]  # 验证技术声明
+[polishing-content]            # ⭐ 润色内容 + 生成图片提示词
        ↓
-[generating-article-images]     # ✨ 生成图片
+[generating-article-images]     # 生成配图
        ↓
-[converting-to-wechat]  # 转换为微信 HTML
+[converting-to-wechat]          # 转换为微信 HTML
        ↓
 [发布到微信]
 ```
 
-**详细步骤：**
-```bash
-# 1. 润色文章（使用 AI 技能）
-请润色 my-article.md
+---
 
-# 2. 审核技术准确性（使用 AI 技能）
-请审查 my-article.md 的技术准确性
+## 📊 效果对比
 
-# 3. 生成图片
-python3 skills/wechat-workflow/generating-article-images/scripts/generate_images.py \
-    --input "my-article.md"
+### 使用 polishing-content vs 不使用
 
-# 4. 转换为微信 HTML
-python3 skills/wechat-workflow/converting-to-wechat/scripts/convert.py \
-    --input "my-article.md"
-```
+| 指标 | 不使用 | 使用 |
+|------|--------|------|
+| 📖 文学性 | ⭐⭐⭐ 专业但干瘪 | ⭐⭐⭐⭐⭐ 生动有趣，有故事性 |
+| 🎨 图片覆盖率 | ⭐⭐ 很多文章没有图片 | ⭐⭐⭐⭐⭐ 每篇文章4-6张图片 |
+| 🏷️ 标题吸引力 | ⭐⭐⭐ 单一标题 | ⭐⭐⭐⭐⭐ 5个备选标题 |
+| 👁️ 视觉效果 | ⭐⭐⭐ 一般 | ⭐⭐⭐⭐⭐ 专业美观 |
+| 📱 可读性 | ⭐⭐⭐ 需要反复阅读 | ⭐⭐⭐⭐⭐ 一遍就能理解 |
+| 🎯 点击率 | ⭐⭐⭐ 一般 | ⭐⭐⭐⭐⭐ 大幅提升 |
+
+### 示例对比
+
+**原文（无润色）**：
+> NotebookLM 是 Google 推出的知识管理工具。它可以帮助用户整理文档，回答问题。
+
+**润色后（金庸式笔触 + 列锦手法）**：
+> 想象一下，在江湖中，若有一位绝世高手，能够过目不忘，将天下武学秘籍尽收脑海，并能举一反三，发现不同武学之间的关联。这便是 Google 推出的 NotebookLM，一位当世的知识管理"大宗师"。
+
+它深谙"书山有路勤为径"的道理，能助你：
+- 📚 整理文档，如同管理藏经阁
+- 🤔 回答问题，如同指点武功
+- 🔗 发现关联，如同融会贯通
 
 ---
 
-### 工作流 2：批量文章转换
-
-**一次转换多篇文章**
-
-```bash
-# 生成所有文章的图片
-for file in /path/to/articles/*.md; do
-    python3 skills/wechat-workflow/generating-article-images/scripts/generate_images.py \
-        --input "$file"
-done
-
-# 转换目录中的所有 Markdown 文件
-python3 skills/wechat-workflow/converting-to-wechat/scripts/convert.py \
-    --input "/path/to/articles/"
-```
-
----
-
-### 工作流 3：自定义样式创建
-
-**创建自己的微信样式预设**
-
-```
-[来自 mdnice 的 HTML 模板]
-       ↓
-[extracting-wechat-styles]  # 提取 YAML 样式
-       ↓
-[converting-to-wechat 使用自定义样式]  # 使用新样式
-```
-
-**详细步骤：**
-```bash
-# 1. 从 HTML 提取样式
-python3 skills/wechat-workflow/extracting-wechat-styles/scripts/generate_style.py \
-    --input "mdnice-export.html" \
-    --name "my-brand-style"
-
-# 2. 使用新样式
-python3 skills/wechat-workflow/converting-to-wechat/scripts/convert.py \
-    --input "article.md" \
-    --style skills/wechat-workflow/converting-to-wechat/styles/my-brand-style.yaml
-```
-
----
-
-### 工作流 4：重新生成特定图片
-
-**重新生成不满意的图片**
-
-```bash
-# 重新生成单张图片
-python3 skills/wechat-workflow/generating-article-images/scripts/generate_images.py \
-    --input "article.md" \
-    --filter "01-oracle-architecture.png"
-
-# 重新生成多张图片
-python3 skills/wechat-workflow/generating-article-images/scripts/generate_images.py \
-    --input "article.md" \
-    --filter "01-*.png"
-```
-
----
-
-## 📁 配置说明
-
-### 文件结构
+## 📁 项目结构
 
 ```
 weixin-skills/
-└── skills/wechat-workflow/
-    ├── converting-to-wechat/          # 核心转换技能
-    │   ├── config.yaml                  # 默认 OSS 凭据（已 gitignore）
-    │   ├── config-example.yaml          # 配置模板
-    │   ├── convert.cfg                  # 默认参数配置
-    │   ├── styles/                      # 视觉样式预设库
-    │   │   ├── mdnice-test.yaml         # 暖橙色，mdnice 风格
-    │   │   ├── wechat-professional-blue.yaml  # 专业蓝
-    │   │   ├── wechat-classic.yaml      # 经典深蓝灰
-    │   │   ├── wechat-ios-blue.yaml     # iOS 蓝
-    │   │   ├── wechat-minimal-dark.yaml # 极简深色
-    │   │   └── wechat-v3-professional.yaml  # v3.0 专业样式
-    │   └── scripts/
-    │       └── convert.py               # 转换脚本
-    ├── polishing-content/              # 文章润色技能
-    │   ├── scripts/                     # 验证和质量控制脚本
-    │   └── references/                  # 示例和技术指南
-    ├── reviewing-technical-accuracy/   # 技术审核技能
-    ├── generating-article-images/     # 图片生成技能 ✨
-    │   └── scripts/
-    │       ├── config.example.yaml       # 配置模板
-    │       ├── generate_images.py        # 生成脚本
-    │       └── requirements.txt          # Python 依赖
-    ├── extracting-wechat-styles/      # 样式提取技能
-    │   └── scripts/
-    │       └── generate_style.py       # 样式提取脚本
-    └── using-wechat-workflow/         # 包概览和导航
-
-系列文件夹/（如 "Oracle view/"）
-├── 文章.md
-├── config.yaml                         # 系列级配置覆盖（可选）
-├── img/                                # 本地图片
-├── image-prompts.md                    # 图片提示词备份（可选）
-└── output/                             # 生成的 HTML（自动创建）
+├── skills/
+│   ├── wechat-workflow/              # 微信工作流技能组
+│   │   ├── converting-to-wechat/     # Markdown → HTML 转换
+│   │   │   ├── scripts/
+│   │   │   │   ├── convert.py        # 主转换脚本
+│   │   │   │   ├── config.example.yaml
+│   │   │   │   └── requirements.txt
+│   │   │   └── styles/               # 6种内置样式
+│   │   ├── generating-article-images/ # 图片生成
+│   │   │   ├── scripts/
+│   │   │   │   ├── generate_images.py # 主图片生成脚本
+│   │   │   │   ├── config.example.yaml
+│   │   │   │   └── requirements.txt
+│   │   ├── polishing-content/        # ⭐ 文章润色（核心）
+│   │   ├── reviewing-technical-accuracy/ # 技术审核
+│   │   ├── extracting-wechat-styles/ # 样式提取
+│   │   └── using-wechat-workflow/    # 工作流概览
+│   ├── notebooklm/                   # NotebookLM 集成
+│   │   ├── scripts/                  # 核心脚本
+│   │   ├── data/                     # 认证数据（gitignore）
+│   │   └── requirements.txt
+│   └── generating-articles-from-docs/ # 文档生成文章
+│       ├── scripts/
+│       ├── config.example.yaml
+│       └── requirements.txt
+├── output/                            # 测试输出目录
+│   ├── articles/                     # Markdown 文章
+│   ├── html/                         # 微信 HTML
+│   └── img/                          # 生成的图片
+├── docs/                              # 文档
+│   └── WORKFLOW_GUIDE.md             # ⭐ 完整工作流程指南
+├── .gitignore                         # Git 忽略规则
+├── CLAUDE.md                          # 技能边界定义
+└── README.md                          # 本文件
 ```
 
-### 默认配置：`convert.cfg`
+---
 
-编辑 `skills/wechat-workflow/converting-to-wechat/convert.cfg` 修改默认参数：
+## ⚙️ 配置说明
 
-```ini
-[defaults]
-# 默认视觉样式预设
-style = skills/wechat-workflow/converting-to-wechat/styles/mdnice-test.yaml
+### 图片生成配置
 
-# 默认本地覆盖配置（含 OSS 凭据）
-config = skills/wechat-workflow/converting-to-wechat/config.yaml
+编辑 `skills/wechat-workflow/generating-article-images/scripts/config.yaml`：
 
-# 默认启用图片上传（true/false）
-upload_images = true
-```
-
-### 图片生成配置：`config.yaml`
-
-**首次使用需要配置：**
-
-```bash
-cd skills/wechat-workflow/generating-article-images/scripts
-cp config.example.yaml config.yaml
-
-# 编辑 config.yaml，填入您的 Gemini API Key
-```
-
-**配置示例：**
 ```yaml
 default_api: gemini
 
@@ -485,20 +270,20 @@ apis:
   gemini:
     enabled: true
     api_key: "YOUR_GEMINI_API_KEY"  # 替换为您的 API Key
-    model: "gemini-3.1-flash-image-preview"
+    model: "gemini-3.1-flash-image-preview"  # 使用最新模型
     timeout: 120
     concurrent_limit: 3
+    max_retries: 3  # 失败重试次数（可选）
+    retry_delay: 2  # 重试延迟（秒，可选）
+
+image:
+  default_aspect_ratio: "16:9"  # 默认图片宽高比
+  output_dir: "img"             # 图片输出目录
 ```
 
-### OSS 凭据：`config.yaml`
+### OSS 图片上传配置（可选）
 
-OSS 凭据存储在 `skills/wechat-workflow/converting-to-wechat/config.yaml`。**此文件已加入 .gitignore，不会提交到 Git。**
-
-为特定文章系列配置不同的 OSS 凭据：
-
-```bash
-cp skills/wechat-workflow/converting-to-wechat/config-example.yaml "Oracle view/config.yaml"
-```
+编辑 `skills/wechat-workflow/converting-to-wechat/config.yaml`：
 
 ```yaml
 image:
@@ -510,55 +295,126 @@ image:
   oss_endpoint: "oss-cn-shanghai.aliyuncs.com"
 ```
 
----
-
-## 🔧 微信编辑器兼容性说明
-
-微信公众号后台编辑器在粘贴 HTML 时会进行严格的"标准化"过滤。本工具针对这些问题做了特定适配：
-
-1. **标签过滤**：编辑器会剔除几乎所有的 `<div>` 标签。
-   - **解决方案**：使用 `<section>` 作为容器标签以保留背景色。
-
-2. **布局属性删除**：`display: flex` 等属性会被删除。
-   - **解决方案**：代码块装饰栏使用 `display: inline-block` + `vertical-align`。
-
-3. **列表换行陷阱**：微信会强制将文本包裹在 `<p>` 中，可能分离标点符号。
-   - **解决方案**：`convert.py` 会主动将文本包裹在 `<section>` 中以防止分离。
-
-4. **CSS 冗余**：背景色多重定义以确保复制粘贴的可靠性。
+**注意**：`config.yaml` 文件已加入 `.gitignore`，不会提交到 Git。
 
 ---
 
-## 📚 完整技能参考
+## 🎨 内置样式
 
-| 技能名称 | 中文名称 | 用途 |
-|------------|--------------|---------|
-| `wechat-workflow:polishing-content` | 文章润色 | 技术文章润色，添加文学技法和图片提示词 |
-| `wechat-workflow:reviewing-technical-accuracy` | 技术审核 | 技术内容审核，验证版本兼容性和代码准确性 |
-| `wechat-workflow:generating-article-images` | 图片生成 | 从提示词自动生成文章配图 |
-| `wechat-workflow:converting-to-wechat` | Markdown转换 | Markdown → 微信公众号 HTML（核心技能） |
-| `wechat-workflow:extracting-wechat-styles` | 样式提取 | 从 HTML 模板提取样式 YAML |
-| `wechat-workflow:using-wechat-workflow` | 包概览 | 包概览、快速开始指南和工作流 |
+| 样式名称 | 风格 | 适用场景 |
+|---------|------|----------|
+| `mdnice-test.yaml` | 暖橙色，现代排版 | 技术博客 |
+| `wechat-professional-blue.yaml` | 专业微信蓝 | 企业号 |
+| `wechat-classic.yaml` | 经典深蓝灰 | 传统媒体 |
+| `wechat-ios-blue.yaml` | iOS 系统蓝 | 科技产品 |
+| `wechat-minimal-dark.yaml` | 极简深色 | 设计类内容 |
+| `wechat-v3-professional.yaml` | v3.0 专业（无emoji） | 正式文章 |
+
+---
+
+## 📊 输出示例
+
+### 完整测试结果
+
+```
+============================================================
+✅ 步骤 1/3: 文章润色（polishing-content）
+============================================================
+  处理文章: 3 篇
+  ✓ 01-ai-skills-notebooklm.md
+    • 生成 5 个备选标题
+    • 应用 16 种文学技巧
+    • 生成 6 个图片提示词
+  ✓ 02-ai-skills-trends-2025.md
+    • 生成 5 个备选标题
+    • 应用 12 种文学技巧
+    • 生成 4 个图片提示词
+  ✓ 03-ai-skills-knowledge-system.md
+    • 生成 5 个备选标题
+    • 应用 14 种文学技巧
+    • 生成 5 个图片提示词
+
+============================================================
+✅ 步骤 2/3: 生成图片
+============================================================
+  文章: 01-ai-skills-notebooklm-polished.md
+  生成图片: 6/6 (100%)
+  ✓ 01-notebooklm-hero.png (1.7 MB)
+  ✓ 01-information-overload.png (1.9 MB)
+  ✓ 01-ai-knowledge-manager.png (2.0 MB)
+  ✓ 01-knowledge-graph.png (1.8 MB)
+  ✓ 01-research-efficiency.png (1.4 MB)
+  ✓ 01-gemini-architecture.png (1.3 MB)
+
+  文章: 02-ai-skills-trends-2025-polished.md
+  生成图片: 3/4 (75%)
+  ✓ 02-ai-trends-hero.png (1.8 MB)
+  ✓ 02-ai-cost-reduction.png (1.4 MB)
+  ✓ 02-ai-business-applications.png (1.8 MB)
+  ⚠️  02-ai-frontier-applications.png (重试3次后失败)
+
+  文章: 03-ai-skills-knowledge-system-polished.md
+  生成图片: 5/5 (100%)
+  ✓ 03-knowledge-system-hero.png (1.8 MB)
+  ✓ 03-information-overload-solution.png (1.7 MB)
+  ✓ 03-knowledge-taxonomy.png (1.5 MB)
+  ✓ 03-smart-retrieval-scenarios.png (1.6 MB)
+  ✓ 03-learning-cycle.png (1.5 MB)
+
+============================================================
+✅ 步骤 3/3: 转换为微信 HTML
+============================================================
+  转换文件数: 12 篇
+  图片上传: 25 张成功
+  输出文件:
+    ✓ 01-ai-skills-notebooklm-polished.html (33.6 KB)
+    ✓ 02-ai-skills-trends-2025-polished.html (39.4 KB)
+    ✓ 03-ai-skills-knowledge-system-polished.html (65.4 KB)
+```
 
 ---
 
 ## 🛠 故障排除
 
 | 问题 | 解决方法 |
-|---------|----------|
+|------|----------|
 | 图片不显示 | 确保 OSS 凭据配置正确且上传已启用 |
-| 排版显示错误 | 粘贴前全选整个 HTML 内容（Ctrl+A / Cmd+A） |
+| 图片生成失败 | 检查 Gemini API Key 和配额，已启用自动重试机制 |
+| 排版显示错误 | 粘贴前全选整个 HTML 内容（Cmd+A） |
 | 代码块样式丢失 | 脚本使用 `<section>` 标签保留样式 |
-| 列表标点换行 | 脚本已自动修复此问题 |
-| 样式未加载 | 检查 `convert.cfg` 中的样式路径或使用绝对路径 |
-| 图片生成失败 | 检查 `generating-article-images/config.yaml` 中的 API Key 配置 |
-| "未找到图片提示词" | 确保文章已通过 `polishing-content` 润色 |
-| Gemini API 配额不足 | 检查 Google Cloud Console 中的 API 使用量和配额 |
+| "未找到图片提示词" | ⭐ 确保文章已通过 `polishing-content` 润色 |
+| 文章干瘪无吸引力 | ⭐ 使用 `polishing-content` 技能润色内容 |
+| 缺少图片 | ⭐ 使用 `polishing-content` 自动生成图片提示词 |
 
 ---
 
-## 🔗 参考项目
+## 🔒 安全说明
 
-- https://github.com/DavidLam-oss/obsidian-wechat-converter
-- https://md.qikqiak.com/
-- https://github.com/cnych/markdown-weixin
+- ✅ 所有 `config.yaml` 文件已加入 `.gitignore`
+- ✅ 只提交 `config.example.yaml` 示例文件
+- ✅ API 密钥、OSS 凭据等敏感信息不会被提交
+- ✅ 认证数据存储在 `skills/notebooklm/data/`（已排除）
+
+---
+
+## 📚 详细文档
+
+- [WORKFLOW_GUIDE.md](docs/WORKFLOW_GUIDE.md) - 完整工作流程指南，深入理解 polishing-content
+- [CLAUDE.md](CLAUDE.md) - 技能边界定义和项目约定
+
+---
+
+## 📄 许可证
+
+MIT License
+
+---
+
+## 🤝 贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+---
+
+**最后更新**: 2026-03-04
+**版本**: 2.0.0

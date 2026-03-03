@@ -1,0 +1,19 @@
+# Generating Articles From Documents - 依赖
+
+# 文档处理
+PyPDF2>=3.0.0
+python-docx>=1.0.0
+markdown>=3.5.0
+
+# 配置管理
+pyyaml>=6.0
+
+# 进度条
+tqdm>=4.65.0
+
+# 文件处理
+pathlib
+glob2
+
+# Claude API (可选，用于内容生成)
+anthropic>=0.40.0

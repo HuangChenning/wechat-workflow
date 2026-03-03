@@ -1,0 +1,143 @@
+# ──────────────────────────────────────────────────────────────────────────────
+# 样式名称：wechat-v3-professional
+# 风格说明：v3.0 专业样式，无表情符号、无渐变、纯色设计
+#           整体风格专业、简洁、人工写作感，避免 AI 式的浮华样式
+# 主色调：#16a085（深绿）、#e67e22（暖橙）
+# 设计理念：No emojis, No gradients, Professional solid colors
+# ──────────────────────────────────────────────────────────────────────────────
+
+theme: wechat-v3-professional
+
+# ── 整体容器 ──────────────────────────────────────────────────────────────────
+container:
+  max_width: 677px        # 微信公众号正文区域推荐宽度
+  font_size: 15px
+  line_height: '1.8'
+  color: '#2c3e50'         # 深灰蓝
+  font_family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, sans-serif
+  padding: 0 20px
+  margin: 20px auto
+
+# ── 标题样式 ──────────────────────────────────────────────────────────────────
+headings:
+  h1:
+    font_size: 24px
+    color: '#16a085'              # 深青绿色 - 专业稳定
+    margin: 35px 0 18px
+    font_weight: bold
+  h2:
+    font_size: 20px
+    color: '#16a085'              # 深青绿色
+    margin: 35px 0 15px
+    font_weight: bold
+  h3:
+    font_size: 17px
+    color: '#2c3e50'              # 深灰蓝
+    margin: 28px 0 12px
+    font_weight: bold
+
+# ── 正文段落 ──────────────────────────────────────────────────────────────────
+paragraph:
+  margin: 14px 0
+  color: '#2c3e50'
+  text_align: justify
+
+# ── 粗体（**text**）───────────────────────────────────────────────────────────
+strong:
+  color: '#e67e22'        # 暖橙色强调 - 友好但不刺眼
+  font_weight: '600'
+
+# ── 斜体（*text*）─────────────────────────────────────────────────────────────
+em:
+  color: '#16a085'        # 深青绿色斜体
+  font_style: italic
+
+# ── 行内代码（`code`）─────────────────────────────────────────────────────────
+code_inline:
+  padding: 2px 5px
+  background: '#f8f9fa'   # 非常浅的灰色
+  border_radius: 3px
+  font_size: 13px
+  color: '#c7254e'        # 红色行内代码
+  border: '1px solid #f0f0f0'
+  font_family: '''SF Mono'', Monaco, Consolas, monospace'
+
+# ── 代码块（```lang ... ```）──────────────────────────────────────────────────
+# convert.py 会自动添加 macOS 风格装饰栏（红黄绿圆点 + 语言标签）
+# background 同时决定装饰栏背景色，color 决定语言标签颜色
+code_block:
+  margin: 14px 0
+  padding: 14px
+  background: '#f8f9fa'   # 非常浅的灰色（v3.0：浅色代码块）
+  border_radius: 4px
+  border: '1px solid #e9ecef'
+  font_size: 13px
+  line_height: '1.6'
+  font_family: '''SF Mono'', Monaco, Consolas, monospace'
+  white_space: pre-wrap   # 自动换行，防止代码在微信端超出宽度
+  word_wrap: break-word
+  overflow_wrap: break-word
+  color: '#2c3e50'        # 深灰蓝文字
+
+# ── 引用块（> text）───────────────────────────────────────────────────────────
+# v3.0 设计：使用文本标签（"提示："、"注意："、"重点："、"成功："），无表情符号
+blockquote:
+  margin: 18px 0
+  padding: 14px 18px
+  background: '#ecf8f3'   # 非常浅的绿色
+  border_left: '4px solid #16a085'  # 深青绿色左边框
+  color: '#2c3e50'
+  border_radius: 0
+  text_align: justify
+
+# ── 列表 ──────────────────────────────────────────────────────────────────────
+list:
+  margin: 14px 0
+  padding_left: 20px
+  color: '#2c3e50'
+  item_margin: 8px 0      # 列表项间距
+  text_align: justify
+  section:
+    margin: 0             # 防止微信编辑器拆分列表项
+    padding: 0
+
+# ── 表格 ──────────────────────────────────────────────────────────────────────
+table:
+  margin: 18px 0
+  width: 100%
+  border_collapse: collapse
+  border: 1px solid #d5d8dc
+  font_size: 14px
+  header_bg: '#16a085'    # 深青绿色表头
+  header_color: '#ffffff'
+  header_padding: 10px
+  cell_padding: 10px
+  cell_border: 1px solid #d5d8dc
+  alternate_row_bg: '#f8f9fa'
+  text_align: justify
+
+# ── 分割线 ────────────────────────────────────────────────────────────────────
+hr:
+  border: none
+  border_top: '1px solid #bdc3c7'  # 中灰色
+  margin: 24px 0
+
+# ── 超链接 ────────────────────────────────────────────────────────────────────
+link:
+  color: '#16a085'        # 深青绿色链接
+  text_decoration: none
+
+# ── 图片 ──────────────────────────────────────────────────────────────────────
+# OSS 凭据请在根目录 style.yaml 中统一配置，不要写在此预设文件中
+# 使用 --config style.yaml --upload-images 参数自动上传图片到 OSS
+image:
+  max_width: 100%
+  height: auto
+  border: '1px solid #d5d8dc'  # 浅灰色边框
+  border_radius: 4px
+  box_shadow: 0 2px 8px rgba(0,0,0,0.1)
+  display: block
+  margin: 18px auto
+  upload_to_oss: false    # OSS 上传开关（凭据在根目录 style.yaml 中配置）
+  oss_dir: wechat-articles  # OSS 中的目录名

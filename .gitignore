@@ -1,34 +1,83 @@
-# ─── Local configs with OSS credentials ───────────────────────────────
-# Copy config-example.yaml to config.yaml and fill in your credentials.
-# The config.yaml files are gitignored so secrets are never committed.
+# ===============================================================================
+# weixin-skills - Git Ignore 配置
+# ===============================================================================
+
+# ── 敏感配置文件（最重要！必须排除）───────────────────────────────────────
 **/config.yaml
-**/style.yaml  # Legacy naming (deprecated)
+**/config.local.yaml
+**/secrets.yaml
+**/credentials.yaml
+**/*.key
+**/*.pem
+**/*.token
+**/.env
+**/.env.local
+**/auth_state.json
+**/state.json
 
-# ─── Output HTML files ───────────────────────────────────────────────
-**/output/*.html
+# ── Python 依赖和虚拟环境 ───────────────────────────────────────────────────
+**/__pycache__/
+**/*.py[cod]
+**/*.pyo
+**/.venv/
+**/venv/
+**/env/
+**/.Python
+**/build/
+**/dist/
+**/*.egg-info/
 
-# ─── Python artifacts ────────────────────────────────────────────────
-__pycache__/
-*.pyc
-*.pyo
-.venv/
+# ── IDE 和编辑器配置 ─────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 
-# ─── macOS ───────────────────────────────────────────────────────────
+# ── 操作系统文件 ─────────────────────────────────────────────────────────────
 .DS_Store
+._*
+Thumbs.db
 
-# ─── Folders to exclude from GitHub ────────────────────────────────
+# ── 项目特定排除 ─────────────────────────────────────────────────────────────
 /Oracle view/
 /example/
-/skills/superpowers/
-/skills/planning-with-files/
-/skills/skill-creator/
-/skills/skills-discovery/
-
-# ─── Root planning docs to exclude ───────────────────────────────────
+*.tmp
+*.bak
+*.log
 /findings.md
 /progress.md
 /task_plan.md
 /test-article.md
 
-# ─── Nested git repository ───────────────────────────────────────────
+# 输出目录
+**/output/
+**/img/
+
+# ── Skills 目录控制（只保留需要的技能）───────────────────────────────────────
+# 排除所有其他技能
+/skills/superpowers/
+/skills/planning-with-files/
+/skills/skill-creator/
+/skills/skills-discovery/
+
+# 排除技能中的临时文件
+**/.venv/
+**/data/
+**/__pycache__/
+**/.DS_Store
+**/user_data_dir/
+**/.auth/
+
+# ─── Git 元数据 ────────────────────────────────────────────────────────────────
 /.git/
+*.orig
+
+# ── 测试和临时报告文件 ─────────────────────────────────────────────────────
+**/quality_report.json
+**/validation_report*.json
+**/test_article.md
+**/test_output/
+**/test_*.py
+**/*_test.md
+**/image-prompts.md

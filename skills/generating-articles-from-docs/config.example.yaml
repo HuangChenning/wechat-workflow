@@ -1,0 +1,104 @@
+# Generating Articles From Documents - 配置文件
+
+# ── NotebookLM 配置 ───────────────────────────────────────────────────────
+
+notebooklm:
+  # NotebookLM notebook URL (共享链接格式)
+  notebook_url: ""  # 例如: https://notebooklm.google.com/notebook/xxx
+
+  # 是否使用已安装的 notebooklm skill
+  use_skill: true
+
+  # skill 路径（留空则自动查找：优先项目内 ../notebooklm，回退到全局 ~/.claude/skills/notebooklm）
+  skill_path: ""
+
+# ── 文章生成配置 ───────────────────────────────────────────────────────────
+
+generation:
+  # 默认文章数量
+  default_count: 3
+
+  # 文章风格
+  style: "professional"  # professional, casual, technical, creative
+
+  # 文章长度
+  length: "medium"  # short, medium, long
+
+  # 输出格式
+  format: "markdown"  # markdown, html
+
+  # 是否生成目录
+  generate_toc: true
+
+  # 是否添加引用
+  include_citations: true
+
+# ── 文档处理配置 ───────────────────────────────────────────────────────────
+
+documents:
+  # 支持的文件格式
+  supported_formats:
+    - pdf
+    - md
+    - txt
+    - docx
+
+  # 最大文件大小 (MB)
+  max_file_size: 50
+
+  # 递归扫描子目录
+  recursive: true
+
+  # 排除的文件模式
+  exclude_patterns:
+    - "*.tmp"
+    - "*.bak"
+    - ".*"
+    - "node_modules/*"
+
+# ── 图片生成配置 ───────────────────────────────────────────────────────────
+
+images:
+  # 是否自动生成配图
+  enabled: true
+
+  # 图片生成 skill 路径
+  skill_path: ""  # 留空则自动查找
+
+  # 每篇文章的图片数量
+  images_per_article: 3
+
+  # 默认宽高比
+  aspect_ratio: "16:9"
+
+# ── 输出配置 ───────────────────────────────────────────────────────────────
+
+output:
+  # 输出目录
+  directory: "./output"
+
+  # 文章命名格式
+  filename_format: "{date}_{title}_{index}.md"
+
+  # 是否创建子目录
+  create_subdirs: true
+
+  # 日期格式
+  date_format: "%Y%m%d"
+
+# ── 工作流配置 ─────────────────────────────────────────────────────────────
+
+workflow:
+  # 步骤顺序
+  steps:
+    - "upload"      # 上传文档到 NotebookLM
+    - "analyze"     # NotebookLM 分析
+    - "plan"        # 生成文章规划
+    - "generate"    # 生成文章内容
+    - "images"      # 生成配图
+
+  # 失败时是否继续
+  continue_on_error: false
+
+  # 是否显示详细日志
+  verbose: true

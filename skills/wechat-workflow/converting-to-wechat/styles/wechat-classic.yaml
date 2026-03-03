@@ -1,0 +1,142 @@
+# ──────────────────────────────────────────────────────────────────────────────
+# 样式名称：wechat-classic
+# 风格说明：经典深色系主题，以深蓝灰（#2c3e50）为主色调。
+#           整体低调沉稳，适合商务、技术类文章，不易引起视觉疲劳。
+# 主色调：#2c3e50（深蓝灰）、#e67e22（橙色强调）
+# ──────────────────────────────────────────────────────────────────────────────
+
+theme: wechat-classic
+
+# ── 整体容器 ──────────────────────────────────────────────────────────────────
+container:
+  max_width: 677px        # 微信公众号正文区域推荐宽度
+  font_size: 15px         # 正文基础字号
+  line_height: '1.8'      # 行高
+  color: '#333333'        # 默认文字颜色
+  font_family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, sans-serif
+  padding: 0 20px
+  margin: 20px auto
+
+# ── 标题样式 ──────────────────────────────────────────────────────────────────
+headings:
+  h1:
+    font_size: 24px
+    color: '#19242f'              # 近黑深蓝
+    margin: 35px 0 18px
+    font_weight: bold
+    border_bottom: '2px solid #2c3e50'  # 深蓝分割线
+    padding_bottom: 8px
+  h2:
+    font_size: 20px
+    color: '#19242f'
+    margin: 35px 0 15px
+    font_weight: bold
+  h3:
+    font_size: 17px
+    color: '#333333'
+    margin: 28px 0 12px
+    font_weight: bold
+
+# ── 正文段落 ──────────────────────────────────────────────────────────────────
+paragraph:
+  margin: 14px 0
+  color: '#333333'
+  text_align: justify
+
+# ── 粗体（**text**）───────────────────────────────────────────────────────────
+strong:
+  color: '#e67e22'        # 橙色，与深色主题形成对比
+  font_weight: '700'
+
+# ── 斜体（*text*）─────────────────────────────────────────────────────────────
+em:
+  color: '#2c3e50'        # 与标题同色，低调强调
+  font_style: italic
+
+# ── 行内代码（`code`）─────────────────────────────────────────────────────────
+code_inline:
+  padding: 2px 5px
+  background: '#f8f9fa'
+  border_radius: 3px
+  font_size: 13px
+  color: '#1465b7'        # 蓝色行内代码
+  border: '1px solid #f0f0f0'
+  font_family: '''SF Mono'', Monaco, Consolas, monospace'
+
+# ── 代码块（```lang ... ```）──────────────────────────────────────────────────
+# convert.py 会自动添加 macOS 风格装饰栏（红黄绿圆点 + 语言标签）
+# background 同时决定装饰栏背景色
+code_block:
+  margin: 14px 0
+  padding: 14px
+  background: '#282c34'   # One Dark 深色背景
+  border_radius: 4px
+  border: '1px solid #e9ecef'
+  font_size: 13px
+  line_height: '1.6'
+  font_family: Operator Mono, Consolas, Monaco, Menlo, monospace
+  white_space: pre-wrap   # 自动换行
+  word_wrap: break-word
+  color: '#abb2bf'        # One Dark 浅灰文字
+
+# ── 引用块（> text）───────────────────────────────────────────────────────────
+blockquote:
+  margin: 18px 0
+  padding: 14px 18px
+  background: '#f8f9fa'   # 浅灰色背景
+  border_left: '4px solid #19242f'  # 左侧深褐色竖线
+  color: '#4f5959'
+  border_radius: 0 4px 4px 0
+  text_align: justify
+
+# ── 列表 ──────────────────────────────────────────────────────────────────────
+list:
+  margin: 14px 0
+  padding_left: 20px
+  color: '#333333'
+  item_margin: 8px 0
+  text_align: justify
+  section:
+    margin: 0
+    padding: 0
+
+# ── 表格 ──────────────────────────────────────────────────────────────────────
+table:
+  margin: 18px 0
+  width: 100%
+  border_collapse: collapse
+  border: 1px solid #d5d8dc
+  font_size: 14px
+  header_bg: '#19242f'     # 深褐色页眉
+  header_color: '#ffffff'
+  header_padding: 10px
+  cell_padding: 10px
+  cell_border: 1px solid #d5d8dc
+  alternate_row_bg: '#f8f9fa'
+  text_align: justify
+  alternate_row_bg: '#f9f9fa'  # 斑马纹
+
+# ── 分割线 ────────────────────────────────────────────────────────────────────
+hr:
+  border: none
+  border_top: '1px solid #e0e0e0'
+  margin: 24px 0
+
+# ── 超链接 ────────────────────────────────────────────────────────────────────
+link:
+  color: '#2c3e50'        # 深蓝链接，与标题一致
+  text_decoration: none
+
+# ── 图片 ──────────────────────────────────────────────────────────────────────
+# OSS 凭据请在根目录 style.yaml 中统一配置，不要写在此预设文件中
+image:
+  max_width: 100%
+  height: auto
+  border: '1px solid #cdd8e3'
+  border_radius: 4px
+  box_shadow: 0 2px 8px rgba(0,0,0,0.05)
+  display: block
+  margin: 18px auto
+  upload_to_oss: false    # OSS 上传开关（凭据在根目录 style.yaml 中配置）
+  oss_dir: wechat-articles
