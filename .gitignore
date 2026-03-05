@@ -50,6 +50,9 @@ Thumbs.db
 /task_plan.md
 /test-article.md
 
+# 生成的PPT大纲文件
+/oracle_11g_ppt_outline/
+
 # 输出目录
 **/output/
 **/img/
