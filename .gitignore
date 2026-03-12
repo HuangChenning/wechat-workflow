@@ -55,6 +55,8 @@ Thumbs.db
 /Oracle view/
 /oracle_11g_ppt_outline/
 /output/
+skills/generating-articles-from-docs/output/
+skills/wechat-workflow/generating-article-images/scripts/img/
 *.tmp
 *.bak
 *.log
