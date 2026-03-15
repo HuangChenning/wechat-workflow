@@ -40,13 +40,23 @@ except ImportError:
 # Style loading
 # ─────────────────────────────────────────────
 
-DEFAULT_STYLE_PATH = Path(__file__).parent.parent / "config.yaml"
+_SKILL_DIR = Path(__file__).parent.parent
+_DEFAULT_STYLE_CANDIDATES = [
+    _SKILL_DIR / "config.yaml",
+    _SKILL_DIR / "config.example.yaml",
+    _SKILL_DIR / "config-example.yaml",
+]
+DEFAULT_STYLE_PATH = next((p for p in _DEFAULT_STYLE_CANDIDATES if p.exists()), None)
 
 
 def load_style(style_path: Optional[str] = None) -> dict:
     """
     Load style config. Merge user config over default config.
     """
+    if DEFAULT_STYLE_PATH is None:
+        print("ERROR: No default style config found. Expected one of: config.yaml, config.example.yaml, config-example.yaml")
+        sys.exit(1)
+
     with open(DEFAULT_STYLE_PATH, "r", encoding="utf-8") as f:
         style = yaml.safe_load(f)
 
