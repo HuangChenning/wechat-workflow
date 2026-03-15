@@ -289,6 +289,9 @@ class WeChatRenderer(mistune.HTMLRenderer):
         # Remove non-CSS config keys
         props.pop("upload_to_oss", None)
         props.pop("oss_dir", None)
+        for k in list(props.keys()):
+            if k.startswith("oss_") or "access_key" in k or "secret" in k:
+                props.pop(k, None)
         css = _css(props)
         alt = text or ""
         title_attr = f' title="{title}"' if title else ""
@@ -681,11 +684,6 @@ CLI 参数优先级高于配置文件。
     if input_path.is_dir():
         # Batch mode
         print(f"\nBatch converting: {input_path}\n" + "─" * 40)
-
-        # Look for series-level config.yaml
-        series_style_path = args.style or str(input_path / "config.yaml")
-        style = load_style(series_style_path if Path(series_style_path).exists()
-                           else args.style)
 
         results = convert_directory(
             str(input_path), style, args.output,
